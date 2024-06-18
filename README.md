@@ -1,100 +1,46 @@
-# _Randomat 2.0_ Events Pack for Jingle Jam 2023
-A pack of [Randomat 2.0](https://github.com/Malivil/TTT-Randomat-20) events created based on the generous donations of our community members in support of [Jingle Jam 2023](https://www.jinglejam.co.uk/).
+# _A Round Of Yogscast Poker_ event for the _Randomat 2.0_ Events Pack for Jingle Jam 2023
+A supplementary event created by Logan Christianson for the [Randomat 2.0 Events Pack for Jingle Jam 2023](https://github.com/Malivil/TTT-Randomat-20-Jingle-Jam-2023), a pack of [Randomat 2.0](https://github.com/Malivil/TTT-Randomat-20) events created in support of [Jingle Jam 2023](https://www.jinglejam.co.uk/).
 
 # Events
 
-## Admin Abuse
-_Suggested By_: Noxx\
-Turns the detective into an Admin with greatly increased admin power.
+## A Round Of Yogscast Poker
+Only if the 9 of Diamonds touch!\
+A round of 5-Card Draw Poker (no Texas Hold 'Em, for my sake), bet with your health. Up to 7 may play. Any pair, three, or four of a kind containing the 9 of Diamonds instantly wins.
 \
 \
 **ConVars**
 \
-_ttt_randomat_adminabuse_ - Default: 1 - Whether this event is enabled.\
-_ttt_randomat_adminabuse_min_players_ - Default: 0 - The minimum number of players required for this event to start.\
-_ttt_randomat_adminabuse_weight_ - Default: -1 - The weight this event should use during the randomized event selection process.\
-_randomat_adminabuse_rate_ - Default: 0.3 - How often (in seconds) the Admin gains power.
+_ttt_randomat_poker_ - Default: 1 - Whether this event is enabled.\
+_ttt_randomat_poker_min_players_ - Default: 0 - The minimum number of players required for this event to start.\
+_ttt_randomat_poker_weight_ - Default: -1 - The weight this event should use during the randomized event selection process.\
+_randomat_poker_manual_round_state_times_ - Default: 0 - Enables use of the various 'RoundState*' ConVars.\
+_randomat_poker_round_state_start_ - Default: 5 - Manually overrides how long clients have to repond to the initial game start.\
+_randomat_poker_round_state_betting_ - Default: 30 - Manually overrides how long the 'betting' phase of the round lasts.\
+_randomat_poker_round_state_discarding_ - Default: 30 - Manually overrides how long the 'discarding' phase of the round lasts.\
+_randomat_poker_round_state_message_ - Default: 5 - Manually overrides how long the round state messages should appear for.\
+_randomat_poker_round_state_end_ - Default: 5 - Manually overrides how long the game outcome message lasts for (as well as how long to wait before starting a new round if continuous play is enabled).\
+_randomat_poker_enable_yogsification_ - Default: 1 - Enables the Yogscast sfx.\
+_randomat_poker_enable_audio_cues_ - Default: 1 - Enables the round state audio cues.\
+_randomat_poker_enable_continuous_play_ - Default: 0 - Enables continuous play, event repeats until TTT game ends.\
+_randomat_poker_enable_smaller_bets_ - Default: 0 - Enables smaller bet increments (default: 25-50-75-100, alt: 10-20-30-...-100).\
+_randomat_poker_enable_nine_diamonds_ - Default: 1 - Enables the 9 of Diamonds win condition gag.
 
-## Christmas Crackers
-_Suggested By_: The Stig\
-Gives everyone a christmas cracker that can be opened with another player, containing a joke, wearable paper hat, and a random item!\
-Puts a candy cane texture on every weapon, adds a screen effect, and plays christmas-themed music! (Which can be muted per player by pressing 'M')
+## A Suspicious Round Of Yogscast Poker
+The women are colluding!\
+A variant game of Yogscast Poker, but the women are colluding. Uses the non-variant mode's ConVars.
 \
 \
 **ConVars**
 \
-_ttt_randomat_crackers_ - Default: 1 - Whether this event is enabled.\
-_ttt_randomat_crackers_min_players_ - Default: 0 - The minimum number of players required for this event to start.\
-_ttt_randomat_crackers_weight_ - Default: -1 - The weight this event should use during the randomized event selection process.\
-_randomat_crackers_item_blocklist_ - Default: "" - Comma-separated list of weapon classnames to not give when a player wins a cracker. (E.g. "weapon_ttt_knife,weapon_ttt_harpoon")\
-_randomat_crackers_music_ - Default: 1 - Play music during this randomat
-
-## Hard Boiled Det-EGG-tive
-_Suggested By_: Spaaz\
-Turns the detective into an egg who moves slower, and has more health and a revolver with infinite ammo.
-\
-\
-**ConVars**
-\
-_ttt_randomat_deteggtive_ - Default: 1 - Whether this event is enabled.\
-_ttt_randomat_deteggtive_min_players_ - Default: 0 - The minimum number of players required for this event to start.\
-_ttt_randomat_deteggtive_weight_ - Default: -1 - The weight this event should use during the randomized event selection process.\
-_randomat_deteggtive_health_ - Default: 200 - How much health the deteggtive should have.\
-_randomat_deteggtive_speed_mult_ - Default: 0.8 - The deteggtive's speed multiplier (e.g. 0.8 = 80% of normal speed)
-
-## Jingle Jam 2023
-_Suggested By_: Malivil\
-"There's only one man who would DARE give me the raspberry"\
-Targets non-innocents and causes "jam" to drip down their screen, obscuring their vision like in the 1987 classic Mel Brooks sci-fi comedy, Spaceballs.
-\
-\
-**ConVars**
-\
-_ttt_randomat_jinglejam2023_ - Default: 1 - Whether this event is enabled.\
-_ttt_randomat_jinglejam2023_min_players_ - Default: 0 - The minimum number of players required for this event to start.\
-_ttt_randomat_jinglejam2023_weight_ - Default: -1 - The weight this event should use during the randomized event selection process.\
-_randomat_jinglejam2023_time_ - Default: 30 - How long to jam player screens for.\
-_randomat_jinglejam2023_targetall_ - Default: 0 - Whether to target all players. If disabled, only non-innocents are targeted.
-
-## Slapstick
-_Suggested By_: The Stig\
-Swaps out game sounds with funny replacements
-\
-\
-**ConVars**
-\
-_ttt_randomat_slapstick_ - Default: 1 - Whether this event is enabled.\
-_ttt_randomat_slapstick_min_players_ - Default: 0 - The minimum number of players required for this event to start.\
-_ttt_randomat_slapstick_weight_ - Default: -1 - The weight this event should use during the randomized event selection process.\
-_randomat_slapstick_endsound_ - Default: 1 - Whether to play the sound at the end of the event
-
-## Yeti Hunt
-_Suggested By_: Kawaii Five-0\
-A Yeti has been spotted! One player turns into a yeti, growing larger and gaining more health. They then use their club to knock back, freeze, and kill their enemies.
-\
-\
-**ConVars**
-\
-_ttt_randomat_yeti_ - Default: 1 - Whether this event is enabled.\
-_ttt_randomat_yeti_min_players_ - Default: 0 - The minimum number of players required for this event to start.\
-_ttt_randomat_yeti_weight_ - Default: -1 - The weight this event should use during the randomized event selection process.\
-_randomat_yeti_scale_ - Default: 1.5 - The scale factor to use for the yeti.\
-_randomat_yeti_freeze_time_ - Default: 5 - The amount of time to freeze players hit by the club freezing projectile.
-
+_ttt_randomat_poker_colluding_ - Default: 1 - Whether this event is enabled.\
+_ttt_randomat_poker_colluding_min_players_ - Default: 0 - The minimum number of players required for this event to start.\
+_ttt_randomat_poker_colluding_weight_ - Default: -1 - The weight this event should use during the randomized event selection process.\
+_randomat_poker_colluding_enable_random_collusions_ - Default: 1 - Enables whether your colluding partner should be randomized or ordered.\
+_randomat_poker_colluding_anonymized_collusions_ - Default: 1 - Enables whether the colluding partner's name should be hidden.\
+_All randomat\_poker\_* ConVars_
 
 # Special Thanks
-- [Game icons](https://game-icons.net/) for the role icons
-- Spaaz for the player model used in the "Hard Boiled Det-EGG-tive" event
-- TFA, Tanki Flo, and Raven for portions of code and effects used in the Yeti Club freezing projectile
-- MGM/Brooksfilms for the sound clip from Spaceballs (1987) used at the start of the "Jingle Jam 2023" event
-  - Sound is property of its respective creators/owners
-- Warner Bros. for the sound clip from Looney Tunes used as the outro for the "Slapstick" event
-  - Sounds are property of their respective creators/owners
-- [Goofy Ahh Sounds](https://steamcommunity.com/sharedfiles/filedetails/?id=2801860110) for the sounds used in the "Slapstick" event
-  - Sounds are property of their respective creators/owners
-- 'Christmas Cracker.wav' by 170134 \
-Licensed under Creative Commons: By Attribution NonCommercial 3.0 License \
-<https://creativecommons.org/licenses/by-nc/3.0/>
-- 'Christmas Rap' Kevin MacLeod (incompetech.com)
-Licensed under Creative Commons: By Attribution 4.0 License
-http://creativecommons.org/licenses/by/4.0/
+- Malivil and Nick for their help debugging code and playtesting the event with me
+- The [vector-playing-cards](https://code.google.com/archive/p/vector-playing-cards/downloads) project on Google Code for the playing card images
+- [n Beats](https://www.youtube.com/watch?v=1jDlRDV3__M) for the card shuffling sound effect
+- [Gfx Sounds](https://gfxsounds.com/free-sound-effects/) for the [poker chips sound effect](https://www.youtube.com/watch?v=rYhKm5qsfZE)

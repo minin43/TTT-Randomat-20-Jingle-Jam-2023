@@ -1025,7 +1025,7 @@ Randomat:register(EVENT)
 EVENT_VARIANT = table.Copy(EVENT)
 EVENT_VARIANT.Title = "A Suspicious Round Of Yogscast Poker"
 EVENT_VARIANT.Description = "The women are colluding!"
-EVENT_VARIANT.ExtDescription = "A variant game of Yogscast Poker, but the women are colluding. Uses the\nnon-variant mode's PokerConVars"
+EVENT_VARIANT.ExtDescription = "A variant game of Yogscast Poker, but the women are colluding. Uses the\nnon-variant mode's ConVars"
 EVENT_VARIANT.id = "poker_colluding"
 EVENT_VARIANT.MinPlayers = 3
 
