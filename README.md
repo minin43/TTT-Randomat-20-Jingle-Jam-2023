@@ -11,7 +11,7 @@ A round of 5-Card Draw Poker (no Texas Hold 'Em, for my sake), bet with your hea
 **ConVars**
 \
 _ttt_randomat_poker_ - Default: 1 - Whether this event is enabled.\
-_ttt_randomat_poker_min_players_ - Default: 0 - The minimum number of players required for this event to start.\
+_ttt_randomat_poker_min_players_ - Default: 2 - The minimum number of players required for this event to start.\
 _ttt_randomat_poker_weight_ - Default: -1 - The weight this event should use during the randomized event selection process.\
 _randomat_poker_manual_round_state_times_ - Default: 0 - Enables use of the various 'RoundState*' ConVars.\
 _randomat_poker_round_state_start_ - Default: 5 - Manually overrides how long clients have to repond to the initial game start.\
@@ -33,7 +33,7 @@ A variant game of Yogscast Poker, but the women are colluding. Uses the non-vari
 **ConVars**
 \
 _ttt_randomat_poker_colluding_ - Default: 1 - Whether this event is enabled.\
-_ttt_randomat_poker_colluding_min_players_ - Default: 0 - The minimum number of players required for this event to start.\
+_ttt_randomat_poker_colluding_min_players_ - Default: 3 - The minimum number of players required for this event to start.\
 _ttt_randomat_poker_colluding_weight_ - Default: -1 - The weight this event should use during the randomized event selection process.\
 _randomat_poker_colluding_enable_random_collusions_ - Default: 1 - Enables whether your colluding partner should be randomized or ordered.\
 _randomat_poker_colluding_anonymized_collusions_ - Default: 1 - Enables whether the colluding partner's name should be hidden.\
