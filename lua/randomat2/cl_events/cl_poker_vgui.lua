@@ -97,7 +97,7 @@ end
 
 function PlayerCard:SetBet(newBet)
     self.Bet = newBet
-    self.BetText = BetToString(self.Bet)
+    self.BetText = PokerRandomat.BetToString(self.Bet)
 
     self:CalculateBetSize()
 end
@@ -242,7 +242,7 @@ function OtherPlayers:SetPlayerBet(ply, betType, bet, plySteamId)
         elseif betType == BettingStatus.RAISE then
             card:SetBet(bet)
             self:ResetPlayerActions()
-            card:SetAction("Raised: " .. BetToString(bet))
+            card:SetAction("Raised: " .. PokerRandomat.BetToString(bet))
         end
     end
 end
@@ -296,7 +296,7 @@ function Card:UpdateCanDraw()
     if self.Rank and self.Rank > Cards.NONE and self.Suit and self.Suit > Suits.NONE then
         self.CanDraw = true
 
-        self.Graphic = Material(self.GraphicsDir[self.Suit] .. CardRankToFileName(self.Rank) .. ".png", "noclamp")
+        self.Graphic = Material(self.GraphicsDir[self.Suit] .. PokerRandomat.CardRankToFileName(self.Rank) .. ".png", "noclamp")
     end
 end
 
@@ -546,7 +546,7 @@ function Controls:Setup()
     self.Fold = vgui.Create("Control_Button", self, "Fold Button")
     self.Fold:SetPos(margin, self:GetTall() - buttonHeight - margin)
     self.Fold:SetSize(buttonWidth, buttonHeight)
-    self.Fold:SetText(BetStatusToString(BettingStatus.FOLD))
+    self.Fold:SetText(PokerRandomat.BetStatusToString(BettingStatus.FOLD))
     self.Fold:SetEnabled(false)
     self.Fold.CustomDoClick = function()
         net.Start("MakeBet")
@@ -560,7 +560,7 @@ function Controls:Setup()
     self.Check = vgui.Create("Control_Button", self, "Check Button")
     self.Check:SetPos(margin * 2 + buttonWidth, self:GetTall() - buttonHeight - margin)
     self.Check:SetSize(buttonWidth, buttonHeight)
-    self.Check:SetText(BetStatusToString(BettingStatus.CHECK))
+    self.Check:SetText(PokerRandomat.BetStatusToString(BettingStatus.CHECK))
     self.Check:SetEnabled(false)
     self.Check.CustomDoClick = function()
         net.Start("MakeBet")
@@ -574,7 +574,7 @@ function Controls:Setup()
     self.Call = vgui.Create("Control_Button", self, "Call Button")
     self.Call:SetPos(margin * 3 + buttonWidth * 2, self:GetTall() - buttonHeight - margin)
     self.Call:SetSize(buttonWidth, buttonHeight)
-    self.Call:SetText(BetStatusToString(BettingStatus.CALL))
+    self.Call:SetText(PokerRandomat.BetStatusToString(BettingStatus.CALL))
     self.Call:SetEnabled(false)
     self.Call.CustomDoClick = function()
         net.Start("MakeBet")
@@ -588,7 +588,7 @@ function Controls:Setup()
     self.Raise = vgui.Create("Control_Button", self, "Raise Button")
     self.Raise:SetPos(margin * 4 + buttonWidth * 3, self:GetTall() - buttonHeight - margin)
     self.Raise:SetSize(buttonWidth, buttonHeight)
-    self.Raise:SetText(BetStatusToString(BettingStatus.RAISE))
+    self.Raise:SetText(PokerRandomat.BetStatusToString(BettingStatus.RAISE))
     self.Raise:SetEnabled(false)
     self.Raise.CustomDoClick = function()
         local _, val = self.RaiseOpt:GetSelected()
@@ -724,7 +724,7 @@ function Controls:ResetRaiseOptions(baselineBet)
     baselineBet = baselineBet or 0
     local betsTable = {}
     
-    if PokerConVars.EnableSmallerBets:GetBool() then
+    if PokerRandomat.ConVars.EnableSmallerBets:GetBool() then
         betsTable = Bets_Alt
     else
         betsTable = Bets
@@ -740,7 +740,7 @@ function Controls:ResetRaiseOptions(baselineBet)
 
     for _, bet in pairs(table.SortByKey(betsTable, true)) do
         if baselineBet < betsTable[bet] then
-            self.RaiseOpt:AddChoice(BetToString(betsTable[bet]), betsTable[bet])
+            self.RaiseOpt:AddChoice(PokerRandomat.BetToString(betsTable[bet]), betsTable[bet])
         end
     end
 end
@@ -780,13 +780,13 @@ function Controls:Paint()
     surface.SetTextPos(18, 4)
     surface.DrawText("Your Bet:")
     surface.SetTextPos(20, 18)
-    surface.DrawText(BetToString(self.CurrentBet))
+    surface.DrawText(PokerRandomat.BetToString(self.CurrentBet))
 
     surface.DrawRect(self:GetWide() - 80, 1, 72, 34)
     surface.SetTextPos(self:GetWide() - 74, 4)
     surface.DrawText("To Match:")
     surface.SetTextPos(self:GetWide() - 72, 18)
-    surface.DrawText(BetToString(self.CurrentRaise))
+    surface.DrawText(PokerRandomat.BetToString(self.CurrentRaise))
 end
 
 vgui.Register("Poker_Controls", Controls, "DPanel")
@@ -838,7 +838,7 @@ end
 function Main:TemporaryMessage(message, optionalTime)
     if self.DisplayPermanentMessage then return end
 
-    local cutoff = CurTime() + (optionalTime or GetDynamicRoundTimerValue("RoundStateMessage"))
+    local cutoff = CurTime() + (optionalTime or PokerRandomat.GetDynamicRoundTimerValue("RoundStateMessage"))
 
     self.DisplayMessageTime = cutoff
     self.DisplayTemporaryMessage = true
@@ -896,7 +896,7 @@ function Main:SetTimer(time)
                 return
             end
 
-            if self.TimeRemaining <= 5 and PokerConVars.EnableRoundStateAudioCues:GetBool() then
+            if self.TimeRemaining <= 5 and PokerRandomat.ConVars.EnableRoundStateAudioCues:GetBool() then
                 surface.PlaySound("weapons/grenade/tick1.wav")
             end
 

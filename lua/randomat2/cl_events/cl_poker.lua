@@ -32,9 +32,9 @@ function EVENT:SetupPanel(isContinuedGame)
     self.PokerPlayers:SetSize(self.PokerMain:GetWide(), 200)
     self.PokerPlayers:SetPlayers(self.Players)
 
-    if PokerConVars.EnableRoundStateAudioCues:GetBool() then
+    if PokerRandomat.ConVars.EnableRoundStateAudioCues:GetBool() then
         if self.ShouldPlayStartSound then
-            if PokerConVars.EnableYogsification:GetBool() then
+            if PokerRandomat.ConVars.EnableYogsification:GetBool() then
                 timer.Simple(1, function()
                     local tbl = EventSounds
                     if self.IsVariantMode then tbl = EventVariantSounds end
@@ -105,7 +105,7 @@ function EVENT:AlertBlinds(bigBlind, littleBlind)
 
     if bigBlind == self.Self then
         local amount = ""
-        if PokerConVars.EnableSmallerBets:GetBool() then
+        if PokerRandomat.ConVars.EnableSmallerBets:GetBool() then
             amount = "20%"
         else
             amount = "Half"
@@ -120,7 +120,7 @@ function EVENT:AlertBlinds(bigBlind, littleBlind)
 
     if littleBlind == self.Self then
         local amount = ""
-        if PokerConVars.EnableSmallerBets:GetBool() then
+        if PokerRandomat.ConVars.EnableSmallerBets:GetBool() then
             amount = "10%"
         else
             amount = "A quarter"
@@ -133,8 +133,8 @@ function EVENT:AlertBlinds(bigBlind, littleBlind)
 
     self.PokerMain:TemporaryMessage(textToDisplay)
     self.PokerPlayers:SetBlinds(littleBlind, bigBlind)
-    self:RegisterBet(littleBlind, BettingStatus.RAISE, GetLittleBlindBet())
-    self:RegisterBet(bigBlind, BettingStatus.RAISE, GetBigBlindBet())
+    self:RegisterBet(littleBlind, BettingStatus.RAISE, PokerRandomat.GetLittleBlindBet())
+    self:RegisterBet(bigBlind, BettingStatus.RAISE, PokerRandomat.GetBigBlindBet())
     self.PokerPlayers:ResetPlayerActions()
 end
 
@@ -164,7 +164,7 @@ function EVENT:SetupHand(newHand, isSecondDeal)
 
         for _, card in ipairs(newHand) do
             if not card.Kept then
-                newCards = newCards .. CardRankToName(card.Rank) .. " of " .. CardSuitToName(card.Suit) .. "\n"
+                newCards = newCards .. PokerRandomat.CardRankToName(card.Rank) .. " of " .. PokerRandomat.CardSuitToName(card.Suit) .. "\n"
             end
         end
     end
@@ -187,7 +187,7 @@ function EVENT:StartBetting(ply, timeToBet)
         self.PokerMain:SetTimer(timeToBet)
         self.PokerControls:EnableBetting()
 
-        if PokerConVars.EnableRoundStateAudioCues:GetBool() then
+        if PokerRandomat.ConVars.EnableRoundStateAudioCues:GetBool() then
             surface.PlaySound("poker/chips.ogg")
         end
     else
@@ -217,7 +217,7 @@ function EVENT:RegisterBet(ply, betType, betAmount, plySteamId)
         end
     end
 
-    if IsAllIn(betAmount) then
+    if PokerRandomat.IsAllIn(betAmount) then
         self.PokerControls:DisableRaising()
     end
 end
@@ -234,7 +234,7 @@ function EVENT:BeginDiscarding(timeToDiscard)
     self.PokerHand:SetCanDiscard(true)
     self.PokerPlayers:ResetPlayerActions()
 
-    if PokerConVars.EnableRoundStateAudioCues:GetBool() then
+    if PokerRandomat.ConVars.EnableRoundStateAudioCues:GetBool() then
         surface.PlaySound("poker/shuffle.ogg")
     end
 end
@@ -248,13 +248,13 @@ function EVENT:RegisterWinner(winner, hand)
         if winner == self.Self then
             self.PokerMain:PermanentMessage("You win! Getting your bonus health now!")
 
-            if PokerConVars.EnableYogsification:GetBool() and PokerConVars.EnableRoundStateAudioCues:GetBool() and self.ShouldPlayStartSound then
+            if PokerRandomat.ConVars.EnableYogsification:GetBool() and PokerRandomat.ConVars.EnableRoundStateAudioCues:GetBool() and self.ShouldPlayStartSound then
                 surface.PlaySound("poker/you_won.ogg")
             end
         else
             self.PokerMain:PermanentMessage(winner:Nick() .. " wins the hand with \n" .. hand .. "!")
 
-            if PokerConVars.EnableYogsification:GetBool() and PokerConVars.EnableRoundStateAudioCues:GetBool() and self.ShouldPlayStartSound  then
+            if PokerRandomat.ConVars.EnableYogsification:GetBool() and PokerRandomat.ConVars.EnableRoundStateAudioCues:GetBool() and self.ShouldPlayStartSound  then
                 surface.PlaySound("poker/robbed.ogg")
             end
         end
@@ -365,7 +365,7 @@ net.Receive("StartBetting", function()
 
     local newBetter = net.ReadEntity()
 
-    EVENT:StartBetting(newBetter, GetDynamicRoundTimerValue("RoundStateBetting"))
+    EVENT:StartBetting(newBetter, PokerRandomat.GetDynamicRoundTimerValue("RoundStateBetting"))
 end)
 
 net.Receive("PlayerFolded", function()
@@ -411,7 +411,7 @@ end)
 net.Receive("StartDiscard", function()
     if not EVENT.IsPlaying then return end
 
-    EVENT:BeginDiscarding(GetDynamicRoundTimerValue("RoundStateDiscarding"))
+    EVENT:BeginDiscarding(PokerRandomat.GetDynamicRoundTimerValue("RoundStateDiscarding"))
 end)
 
 net.Receive("DeclareWinner", function()
@@ -458,7 +458,7 @@ function EVENT:SetupExtraHand(plyName, extraHand)
         self.ExtraPokerHand:SetPos(0, 0)
         self.ExtraPokerHand:SetSize(self.ExtraPokerHandFrame:GetWide(), self.ExtraPokerHandFrame:GetTall())
 
-        if PokerConVars.AnonymizeCollusions:GetBool() then
+        if PokerRandomat.ConVars.AnonymizeCollusions:GetBool() then
             self.ExtraPokerHand:SetTitle("Colluded Hand")
         else
             self.ExtraPokerHand:SetTitle(plyName .. "'s Hand")

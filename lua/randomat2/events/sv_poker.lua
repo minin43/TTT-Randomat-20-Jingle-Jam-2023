@@ -54,7 +54,7 @@ function EVENT:GeneratePlayers()
     local playersToPlay = {}
 
     -- If continuous play is enabled, return the previous player list, clean up any disconnected players, and add in as many new players as possible
-    if PokerConVars.EnableContinuousPlay:GetBool() and #self.ContinuousPlayers > 0 then
+    if PokerRandomat.ConVars.EnableContinuousPlay:GetBool() and #self.ContinuousPlayers > 0 then
         playersToPlay = table.Copy(self.ContinuousPlayers)
 
         local playersToRemove = {}
@@ -123,7 +123,7 @@ function EVENT:Begin()
         end
     net.Broadcast()
 
-    timer.Create("PokerStartTimeout", GetDynamicRoundTimerValue("RoundStateStart"), 1, function()
+    timer.Create("PokerStartTimeout", PokerRandomat.GetDynamicRoundTimerValue("RoundStateStart"), 1, function()
         if EVENT_REF.Running then return end
 
         for index, unreadyPly in ipairs(EVENT_REF.Players) do
@@ -158,8 +158,8 @@ function EVENT:StartGame()
     self.SmallBlind = self.Players[(self.NumberOfGames % #self.Players) + 1]
     self.BigBlind = self.Players[((self.NumberOfGames + 1) % #self.Players) + 1]
 
-    self:RegisterPlayerBet(self.SmallBlind, BettingStatus.RAISE, GetLittleBlindBet(), true)
-    self:RegisterPlayerBet(self.BigBlind, BettingStatus.RAISE, GetBigBlindBet(), true)
+    self:RegisterPlayerBet(self.SmallBlind, BettingStatus.RAISE, PokerRandomat.GetLittleBlindBet(), true)
+    self:RegisterPlayerBet(self.BigBlind, BettingStatus.RAISE, PokerRandomat.GetBigBlindBet(), true)
     self.BigBlind.Status = BettingStatus.NONE
 
     net.Start("NotifyBlinds")
@@ -170,7 +170,7 @@ function EVENT:StartGame()
     self:GenerateDeck()
     self:DealDeck()
 
-    timer.Create("CallBeginBetting", GetDynamicRoundTimerValue("RoundStateMessage"), 1, function()
+    timer.Create("CallBeginBetting", PokerRandomat.GetDynamicRoundTimerValue("RoundStateMessage"), 1, function()
         self:BeginBetting(self.BigBlind.NextPlayer)
     end)
 end
@@ -258,7 +258,7 @@ function EVENT:BeginBetting(optionalPlayer)
             net.WriteEntity(self.ExpectantBetter)
         net.Broadcast()
 
-        timer.Create("WaitingOnPlayerBet", GetDynamicRoundTimerValue("RoundStateBetting"), 1, function()
+        timer.Create("WaitingOnPlayerBet", PokerRandomat.GetDynamicRoundTimerValue("RoundStateBetting"), 1, function()
             EVENT_REF:RegisterPlayerBet(EVENT_REF.ExpectantBetter, BettingStatus.CHECK, EVENT_REF.PlayerBets[EVENT_REF.ExpectantBetter] or 0)
         end)
     else
@@ -437,7 +437,7 @@ function EVENT:RegisterPlayerBet(ply, bet, betAmount, forceBet)
                 net.Start("DeclareNoWinner")
                 net.Broadcast()
 
-                timer.Create("CallEventEnd", GetDynamicRoundTimerValue("RoundStateMessage"), 1, function()
+                timer.Create("CallEventEnd", PokerRandomat.GetDynamicRoundTimerValue("RoundStateMessage"), 1, function()
                     self:End()
                 end)
             end
@@ -446,7 +446,7 @@ function EVENT:RegisterPlayerBet(ply, bet, betAmount, forceBet)
 end
 
 function EVENT:EndBetting()
-    timer.Create("CallEndBetting", GetDynamicRoundTimerValue("RoundStateMessage"), 1, function()
+    timer.Create("CallEndBetting", PokerRandomat.GetDynamicRoundTimerValue("RoundStateMessage"), 1, function()
         local epr = EnoughPlayersRemaining() -- This function needs to be ran BEFORE changing player's Status property
 
         for _, ply in ipairs(self.Players) do
@@ -466,7 +466,7 @@ end
 function EVENT:BeginSecoundRoundBetting()
     if not self.Started then self:End() return end
 
-    if AllPlayersMatchingBets(true) and IsAllIn(GetHighestBet())then
+    if AllPlayersMatchingBets(true) and PokerRandomat.IsAllIn(GetHighestBet())then
         self:CalculateWinner()
     else
         self:BeginBetting()
@@ -481,7 +481,7 @@ function EVENT:BeginDiscarding()
 
     self.AcceptingDiscards = true
 
-    timer.Create("AcceptDiscards", GetDynamicRoundTimerValue("RoundStateDiscarding"), 1, function()
+    timer.Create("AcceptDiscards", PokerRandomat.GetDynamicRoundTimerValue("RoundStateDiscarding"), 1, function()
         EVENT_REF:CompletePlayerDiscarding()
     end)
 end
@@ -527,7 +527,7 @@ function EVENT:CompletePlayerDiscarding()
 
     self:DealDeck(true)
 
-    timer.Create("CallBeginSecondRoundBetting", GetDynamicRoundTimerValue("RoundStateMessage"), 1, function()
+    timer.Create("CallBeginSecondRoundBetting", PokerRandomat.GetDynamicRoundTimerValue("RoundStateMessage"), 1, function()
         self:BeginSecoundRoundBetting()
     end)
 end
@@ -549,8 +549,8 @@ function EVENT:CalculateWinner()
         self:ApplyRewards(winner, hand)
     end
 
-    timer.Create("CallRoundEnd", GetDynamicRoundTimerValue("RoundStateEnd"), 1, function()
-        if PokerConVars.EnableContinuousPlay:GetBool() and GetRoundState() == ROUND_ACTIVE then
+    timer.Create("CallRoundEnd", PokerRandomat.GetDynamicRoundTimerValue("RoundStateEnd"), 1, function()
+        if PokerRandomat.ConVars.EnableContinuousPlay:GetBool() and GetRoundState() == ROUND_ACTIVE then
             self:ContinuousPlay()
         else
             self:End()
@@ -645,7 +645,7 @@ local function GetHandRank(ply)
     -- Check possible hands in descending order --
 
     -- Any pair+ featuring a nine of diamonds
-    if PokerConVars.EnableNineDiamondsGag:GetBool() and suitsByRank[Cards.NINE] and #suitsByRank[Cards.NINE] > 1 and table.HasValue(suitsByRank[Cards.NINE], Suits.DIAMONDS) then
+    if PokerRandomat.ConVars.EnableNineDiamondsGag:GetBool() and suitsByRank[Cards.NINE] and #suitsByRank[Cards.NINE] > 1 and table.HasValue(suitsByRank[Cards.NINE], Suits.DIAMONDS) then
         return Hands.NINE_OF_DIAMONDS, 0, 0, {}, "Two+ of a kind with a 9 of diamonds"
     end
 
@@ -752,7 +752,7 @@ function EVENT:GetWinningPlayer()
 end
 
 local function BetAsPercent(bet)
-    if PokerConVars.EnableSmallerBets:GetBool() then
+    if PokerRandomat.ConVars.EnableSmallerBets:GetBool() then
         return bet * 0.10
     else
         return bet * 0.25
@@ -771,7 +771,7 @@ function EVENT:ApplyRewards(winner, winningHand)
             runningHealth = runningHealth + healthToLose
 
             if bet > 0 then
-                if IsAllIn(bet) then
+                if PokerRandomat.IsAllIn(bet) then
                     ply:Kill()
                 else
                     ply:SetHealth(math.max(1, ply:Health() - healthToLose))
@@ -783,7 +783,7 @@ function EVENT:ApplyRewards(winner, winningHand)
 
     local cards = ""
     for _, card in ipairs(winner.Cards) do
-        cards = cards .. "- " .. CardRankToName(card.Rank) .. " of " .. CardSuitToName(card.Suit) .. "\n"
+        cards = cards .. "- " .. PokerRandomat.CardRankToName(card.Rank) .. " of " .. PokerRandomat.CardSuitToName(card.Suit) .. "\n"
     end
 
     for _, ply in ipairs(player.GetAll()) do
@@ -851,32 +851,32 @@ function EVENT:GetConVars()
     table.insert(sliders, {
         cmd = "round_state_start",
         dsc = "Manual 'client timeout' duration",
-        min = PokerConVars.RoundStateStart:GetMin(),
-        max = PokerConVars.RoundStateStart:GetMax()
+        min = PokerRandomat.ConVars.RoundStateStart:GetMin(),
+        max = PokerRandomat.ConVars.RoundStateStart:GetMax()
     })
     table.insert(sliders, {
         cmd = "round_state_betting",
         dsc = "Manual 'betting' phase duration",
-        min = PokerConVars.RoundStateBetting:GetMin(),
-        max = PokerConVars.RoundStateBetting:GetMax()
+        min = PokerRandomat.ConVars.RoundStateBetting:GetMin(),
+        max = PokerRandomat.ConVars.RoundStateBetting:GetMax()
     })
     table.insert(sliders, {
         cmd = "round_state_discarding",
         dsc = "Manual 'discarding' phase duration",
-        min = PokerConVars.RoundStateDiscarding:GetMin(),
-        max = PokerConVars.RoundStateDiscarding:GetMax()
+        min = PokerRandomat.ConVars.RoundStateDiscarding:GetMin(),
+        max = PokerRandomat.ConVars.RoundStateDiscarding:GetMax()
     })
     table.insert(sliders, {
         cmd = "round_state_message",
         dsc = "Manual message duration (should be smaller than all phase durations)",
-        min = PokerConVars.RoundStateMessage:GetMin(),
-        max = PokerConVars.RoundStateMessage:GetMax()
+        min = PokerRandomat.ConVars.RoundStateMessage:GetMin(),
+        max = PokerRandomat.ConVars.RoundStateMessage:GetMax()
     })
     table.insert(sliders, {
         cmd = "round_state_end",
         dsc = "Manual post-game wait duration",
-        min = PokerConVars.RoundStateEnd:GetMin(),
-        max = PokerConVars.RoundStateEnd:GetMax()
+        min = PokerRandomat.ConVars.RoundStateEnd:GetMin(),
+        max = PokerRandomat.ConVars.RoundStateEnd:GetMax()
     })
 
     table.insert(checks, {
@@ -1041,8 +1041,8 @@ function EVENT_VARIANT:StartGame()
     self.SmallBlind = self.Players[(self.NumberOfGames % #self.Players) + 1]
     self.BigBlind = self.Players[((self.NumberOfGames + 1) % #self.Players) + 1]
 
-    self:RegisterPlayerBet(self.SmallBlind, BettingStatus.RAISE, GetLittleBlindBet(), true)
-    self:RegisterPlayerBet(self.BigBlind, BettingStatus.RAISE, GetBigBlindBet(), true)
+    self:RegisterPlayerBet(self.SmallBlind, BettingStatus.RAISE, PokerRandomat.GetLittleBlindBet(), true)
+    self:RegisterPlayerBet(self.BigBlind, BettingStatus.RAISE, PokerRandomat.GetBigBlindBet(), true)
     self.BigBlind.Status = BettingStatus.NONE
 
     net.Start("NotifyBlinds")
@@ -1055,7 +1055,7 @@ function EVENT_VARIANT:StartGame()
     self:GenerateCollusions() -- Differences
     self:ShareHands() -- Difference
 
-    timer.Create("CallBeginBetting", GetDynamicRoundTimerValue("RoundStateMessage"), 1, function()
+    timer.Create("CallBeginBetting", PokerRandomat.GetDynamicRoundTimerValue("RoundStateMessage"), 1, function()
         self:BeginBetting(self.BigBlind.NextPlayer)
     end)
 end
@@ -1066,7 +1066,7 @@ function EVENT_VARIANT:GenerateCollusions()
     local playerCount = #self.Players
     self.ColludingPlayers = {}
 
-    if PokerConVars.EnableRandomCollusions:GetBool() then
+    if PokerRandomat.ConVars.EnableRandomCollusions:GetBool() then
         local randomPlayers = table.Copy(self.Players)
         table.Shuffle(randomPlayers)
 
@@ -1117,7 +1117,7 @@ function EVENT_VARIANT:CompletePlayerDiscarding()
     self:DealDeck(true)
     self:ShareHands() -- Difference
 
-    timer.Create("CallBeginSecondRoundBetting", GetDynamicRoundTimerValue("RoundStateMessage"), 1, function()
+    timer.Create("CallBeginSecondRoundBetting", PokerRandomat.GetDynamicRoundTimerValue("RoundStateMessage"), 1, function()
         self:BeginSecoundRoundBetting()
     end)
 end
